@@ -150,7 +150,7 @@ func main() {
 		} else {
 			log.Println("No slots found")
 		}
-		r := 60
+		r := Rand.Int(60)
 		s := fmt.Sprint(time.Duration(r) * time.Second)
 		alert("Retrigger in: "+s, bot, chatID)
 		ping()
