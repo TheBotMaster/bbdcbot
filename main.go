@@ -44,8 +44,8 @@ func main() {
 	}()
 	for {
 		//fetching cookies
-		log.Println("Fetching cookies")
-		sessionID := fetchCookies()
+		//log.Println("Fetching cookies")
+		//sessionID := fetchCookies()
 
 		//logging in
 		log.Println("Logging in")
@@ -53,7 +53,7 @@ func main() {
 		loginForm.Add("txtNRIC", os.Getenv("NRIC"))
 		loginForm.Add("txtPassword", os.Getenv("PASSWORD"))
 		loginForm.Add("btnLogin", " ")
-		req, err := http.NewRequest("POST", "https://www.bbdc.sg/bbdc/bbdc_web/header2.asp",
+		req, err := http.NewRequest("POST", "http://www.bbdc.sg/bbdc/bbdc_web/header2.asp",
 			strings.NewReader(loginForm.Encode()))
 		errCheck(err, "Error creating log in request")
 		//req.AddCookie(aspxanon)
@@ -65,7 +65,7 @@ func main() {
 
 		//fetching the booking page
 		log.Println("Fetching booking page")
-		req, err = http.NewRequest("POST", "http://www.bbdc.sg/bbdc/b-3c-pLessonBooking1.asp",
+		req, err = http.NewRequest("POST", "http://www.bbdc.sg/bbdc/b-2b-pLessonBooking1.asp",
 			strings.NewReader(bookingForm().Encode()))
 		//req.AddCookie(aspxanon)
 		req.AddCookie(sessionID)
@@ -181,9 +181,9 @@ func loadEnvironmentalVariables() {
 }
 
 func fetchCookies() (*http.Cookie) {
-	resp, err := http.Get("https://www.bbdc.sg/bbdc/bbdc_web/newheader.asp")
+	resp, err := http.Get("http://www.bbdc.sg/bbdc/bbdc_web/newheader.asp")
 	errCheck(err, "Error fetching cookies (sessionID)")
-	sessionID := AKMHIIHCFIEHKFDENICOPNOD
+	sessionID := resp.Cookies()[0]
 	return sessionID
 }
 
