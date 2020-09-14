@@ -45,7 +45,7 @@ func main() {
 	for {
 		//fetching cookies
 		log.Println("Fetching cookies")
-		sessionID := fetchCookies()
+		aspxanon, sessionID := fetchCookies()
 
 		//logging in
 		log.Println("Logging in")
@@ -56,7 +56,7 @@ func main() {
 		req, err := http.NewRequest("POST", "http://www.bbdc.sg/bbdc/bbdc_web/header2.asp",
 			strings.NewReader(loginForm.Encode()))
 		errCheck(err, "Error creating log in request")
-		//req.AddCookie(aspxanon)
+		req.AddCookie(aspxanon)
 		req.AddCookie(sessionID)
 		req.AddCookie(&http.Cookie{Name: "language", Value: "en-US"})
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -67,7 +67,7 @@ func main() {
 		log.Println("Fetching booking page")
 		req, err = http.NewRequest("POST", "http://www.bbdc.sg/bbdc/b-2b-pLessonBooking1.asp",
 			strings.NewReader(bookingForm().Encode()))
-		//req.AddCookie(aspxanon)
+		req.AddCookie(aspxanon)
 		req.AddCookie(sessionID)
 		req.AddCookie(&http.Cookie{Name: "language", Value: "en-US"})
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -180,11 +180,15 @@ func loadEnvironmentalVariables() {
 	}
 }
 
-func fetchCookies() (*http.Cookie) {
-	resp, err := http.Get("http://www.bbdc.sg/bbdc/bbdc_web/newheader.asp")
+func fetchCookies() (*http.Cookie, *http.Cookie) {
+	resp, err := http.Get("http://www.bbdc.sg/bbweb/default.aspx")
+	errCheck(err, "Error fetching cookies")
+	aspxanon := resp.Cookies()[0]
+	resp, err = http.Get("http://www.bbdc.sg/bbdc/bbdc_web/newheader.asp")
 	errCheck(err, "Error fetching cookies (sessionID)")
-	sessionID := resp.Cookies()[1]
-	return sessionID
+	sessionID := resp.Cookies()[0]
+	
+	return aspxanon, sessionID
 }
 
 func paymentForm(slotID string) url.Values {
