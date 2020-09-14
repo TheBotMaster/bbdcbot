@@ -45,7 +45,7 @@ func main() {
 	for {
 		//fetching cookies
 		log.Println("Fetching cookies")
-		sessionID : MLLNGOGDMPBGDDDGILNBONFO
+		sessionID := MLLNGOGDMPBGDDDGILNBONFO
 
 		//logging in
 		log.Println("Logging in")
