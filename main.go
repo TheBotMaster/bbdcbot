@@ -53,7 +53,7 @@ func main() {
 		loginForm.Add("txtNRIC", os.Getenv("NRIC"))
 		loginForm.Add("txtPassword", os.Getenv("PASSWORD"))
 		loginForm.Add("btnLogin", " ")
-		req, err := http.NewRequest("POST", "http://www.bbdc.sg/bbdc/bbdc_web/header2.asp",
+		req, err := http.NewRequest("POST", "https://www.bbdc.sg/bbdc/bbdc_web/header2.asp",
 			strings.NewReader(loginForm.Encode()))
 		errCheck(err, "Error creating log in request")
 		//req.AddCookie(aspxanon)
@@ -181,7 +181,7 @@ func loadEnvironmentalVariables() {
 }
 
 func fetchCookies() (*http.Cookie) {
-	resp, err := http.Get("http://www.bbdc.sg/bbdc/bbdc_web/newheader.asp")
+	resp, err := http.Get("https://www.bbdc.sg/bbdc/bbdc_web/newheader.asp")
 	errCheck(err, "Error fetching cookies (sessionID)")
 	sessionID := resp.Cookies()[0]
 	return sessionID
